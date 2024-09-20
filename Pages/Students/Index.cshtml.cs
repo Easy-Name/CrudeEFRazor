@@ -1,23 +1,24 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Students
 {
     public class IndexModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
+        private readonly IStudentRepository _studentRepository;
 
-        public IndexModel(Infrastructure.Data.ApplicationDbContext context)
+        public IndexModel(IStudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
 
         public IList<Student> Student { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Student = await _context.Students.ToListAsync();
+            Student = await _studentRepository.OnGetAsync();
         }
     }
 }

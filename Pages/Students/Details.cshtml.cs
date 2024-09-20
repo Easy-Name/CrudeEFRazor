@@ -23,7 +23,7 @@ namespace Domain.Pages_Students
                 return NotFound();
             }
 
-            var student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
+            var student = await _context.Students.Include(x=>x.Premiums).FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
                 return NotFound();

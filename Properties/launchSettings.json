@@ -36,4 +36,4 @@
     }
   }
 }
-//connection string deve estar aqui
+//connection string deve estar aqui nessa classe (esse é o correto)

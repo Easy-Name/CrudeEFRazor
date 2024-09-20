@@ -1,19 +1,24 @@
 
 //using BaltaTest.Data;
+using Domain.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-/*var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection"); //?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));*/
+    options.UseSqlServer(connectionString));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDbContext<ApplicationDbContext>();
 
-/*builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();*/
+//QUEM PEDIR A INTERFACE IStudentRepository, eu vou devolver a classe concreta StudentRepository (isso é injeção de dependência)
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
