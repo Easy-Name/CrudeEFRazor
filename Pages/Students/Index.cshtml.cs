@@ -18,7 +18,7 @@ namespace Domain.Pages_Students
 
         public async Task OnGetAsync()
         {
-            Student = await _studentRepository.OnGetAsync();
+            Student = await _studentRepository.OnGetAsync(); //here is the usage of the repository to query the database
         }
     }
 }

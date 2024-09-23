@@ -1,24 +1,24 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Premiums
 {
     public class IndexModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
 
-        public IndexModel(Infrastructure.Data.ApplicationDbContext context)
+        private readonly IPremiumRepository _premiumRepository;
+
+        public IndexModel(IPremiumRepository premiumRepository)
         {
-            _context = context;
+            _premiumRepository = premiumRepository;
         }
 
         public IList<Premium> Premium { get;set; } = default!;
 
         public async Task OnGetAsync()
         {
-            Premium = await _context.Premium
-                .Include(p => p.Student).ToListAsync();
+            Premium = await _premiumRepository.OnGetAsync();
         }
     }
 }
