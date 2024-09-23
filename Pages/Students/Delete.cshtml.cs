@@ -8,13 +8,6 @@ namespace Domain.Pages_Students
 {
     public class DeleteModel : PageModel
     {
-        /* readonly Infrastructure.Data.ApplicationDbContext _context;
-
-        public DeleteModel(Infrastructure.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }*/
-
 
         private readonly IStudentRepository _studentRepository;
 
@@ -22,11 +15,6 @@ namespace Domain.Pages_Students
         {
             _studentRepository = studentRepository;
         }
-
-
-
-
-
 
 
         [BindProperty]
@@ -59,7 +47,7 @@ namespace Domain.Pages_Students
                 return NotFound();
             }
 
-            //var student = await _context.Students.FindAsync(id);
+            //var student = await _context.Students.FindAsync(id); (why use FindAsync?)??????????
             var student = _studentRepository.OnGetAsync(id).Result; //here is the usage of the repository to query the database
 
             if (student != null)

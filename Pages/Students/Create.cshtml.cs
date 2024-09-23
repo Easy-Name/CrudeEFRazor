@@ -1,17 +1,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Students
 {
     public class CreateModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
+        private readonly IStudentRepository _studentRepository;
 
-        public CreateModel(Infrastructure.Data.ApplicationDbContext context)
+        public CreateModel(IStudentRepository studentRepository)
         {
-            _context = context;
+            _studentRepository = studentRepository;
         }
+
 
         public IActionResult OnGet()
         {
@@ -29,8 +31,7 @@ namespace Domain.Pages_Students
                 return Page();
             }
 
-            _context.Students.Add(Student);
-            await _context.SaveChangesAsync();
+            await _studentRepository.CreateAsync(Student); //here is the usage of the repository to query the database
 
             return RedirectToPage("./Index");
         }
