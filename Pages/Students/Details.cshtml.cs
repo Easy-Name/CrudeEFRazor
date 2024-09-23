@@ -1,25 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using Domain.Models;
-using Infrastructure.Data;
 using Domain.Interfaces;
 
 namespace Domain.Pages_Students
 {
     public class DetailsModel : PageModel
     {
-       /* private readonly ApplicationDbContext _context;
-
-        public DetailsModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }*/
-
-
-
-
-
 
         private readonly IStudentRepository _studentRepository;
 
@@ -27,9 +14,6 @@ namespace Domain.Pages_Students
         {
             _studentRepository = studentRepository;
         }
-
-
-
 
 
         public Student Student { get; set; } = default!;

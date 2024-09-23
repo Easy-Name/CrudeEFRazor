@@ -2,17 +2,32 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Students
 {
     public class DeleteModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
+        /* readonly Infrastructure.Data.ApplicationDbContext _context;
 
         public DeleteModel(Infrastructure.Data.ApplicationDbContext context)
         {
             _context = context;
+        }*/
+
+
+        private readonly IStudentRepository _studentRepository;
+
+        public DeleteModel(IStudentRepository studentRepository)
+        {
+            _studentRepository = studentRepository;
         }
+
+
+
+
+
+
 
         [BindProperty]
         public Student Student { get; set; } = default!;
@@ -24,7 +39,7 @@ namespace Domain.Pages_Students
                 return NotFound();
             }
 
-            var student = await _context.Students.FirstOrDefaultAsync(m => m.Id == id);
+            var student = _studentRepository.OnGetAsync(id).Result;
 
             if (student == null)
             {
@@ -44,12 +59,13 @@ namespace Domain.Pages_Students
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            //var student = await _context.Students.FindAsync(id);
+            var student = _studentRepository.OnGetAsync(id).Result; //here is the usage of the repository to query the database
+
             if (student != null)
             {
                 Student = student;
-                _context.Students.Remove(Student);
-                await _context.SaveChangesAsync();
+                await _studentRepository.DeleteAsync(Student); //here is the usage of the repository to query the database
             }
 
             return RedirectToPage("./Index");
