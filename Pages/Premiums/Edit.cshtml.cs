@@ -3,17 +3,21 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Premiums
 {
     public class EditModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
 
-        public EditModel(Infrastructure.Data.ApplicationDbContext context)
+        private readonly IPremiumRepository _premiumRepository;
+
+        public EditModel(IPremiumRepository premiumRepository)
         {
-            _context = context;
+            _premiumRepository = premiumRepository;
         }
+
+
 
         [BindProperty]
         public Premium Premium { get; set; } = default!;
@@ -25,7 +29,7 @@ namespace Domain.Pages_Premiums
                 return NotFound();
             }
 
-            var premium =  await _context.Premium.FirstOrDefaultAsync(m => m.Id == id);
+            var premium = await _premiumRepository.OnGetAsync(id);  //here is the usage of the repository to query the database
             if (premium == null)
             {
                 return NotFound();

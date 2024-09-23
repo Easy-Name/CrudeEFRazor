@@ -23,5 +23,22 @@ namespace Infrastructure.Data.Repositories
             return await _context.Premium
                 .Include(p => p.Student).ToListAsync();
         }
+
+        public async Task<Premium> OnGetAsync(int? id)
+        {
+            return await _context.Premium.FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task CreateAsync(Premium premium)
+        {
+            _context.Premium.Add(premium);
+            await _context.SaveChangesAsync();
+        }
+        public async Task DeleteAsync(Premium premium)
+        {
+            _context.Premium.Remove(premium);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

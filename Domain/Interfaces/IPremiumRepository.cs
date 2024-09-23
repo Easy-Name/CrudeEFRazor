@@ -10,6 +10,17 @@ namespace Domain.Interfaces
     public interface IPremiumRepository
     {
         Task<List<Premium>> OnGetAsync();
+
+        Task<Premium> OnGetAsync(int? id);
+
+        Task DeleteAsync(Premium premium);
+
+        Task CreateAsync(Premium premium);
+
+
+
+
+
     }
 }
 

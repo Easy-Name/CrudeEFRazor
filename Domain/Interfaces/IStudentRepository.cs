@@ -14,11 +14,6 @@ namespace Domain.Interfaces
 
         Task CreateAsync(Student student);
 
-
-
-
-
-
     }
 }
 
