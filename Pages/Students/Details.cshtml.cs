@@ -2,17 +2,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Infrastructure.Data;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Students
 {
     public class DetailsModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
+       /* private readonly ApplicationDbContext _context;
 
-        public DetailsModel(Infrastructure.Data.ApplicationDbContext context)
+        public DetailsModel(ApplicationDbContext context)
         {
             _context = context;
+        }*/
+
+
+
+
+
+
+        private readonly IStudentRepository _studentRepository;
+
+        public DetailsModel(IStudentRepository studentRepository)
+        {
+            _studentRepository = studentRepository;
         }
+
+
+
+
 
         public Student Student { get; set; } = default!;
 
@@ -23,7 +41,8 @@ namespace Domain.Pages_Students
                 return NotFound();
             }
 
-            var student = await _context.Students.Include(x=>x.Premiums).FirstOrDefaultAsync(m => m.Id == id);
+            var student = _studentRepository.OnGetAsync(id).Result; //here is the usage of the repository to query the database
+
             if (student == null)
             {
                 return NotFound();

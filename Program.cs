@@ -18,6 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>();
 
 //QUEM PEDIR A INTERFACE IStudentRepository, eu vou devolver a classe concreta StudentRepository (isso é injeção de dependência)
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IPremiumRepository, PremiumRepository>();
 
 builder.Services.AddRazorPages();
 
