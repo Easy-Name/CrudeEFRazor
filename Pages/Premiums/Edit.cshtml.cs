@@ -3,16 +3,20 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Premiums
 {
     public class EditModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
 
-        public EditModel(Infrastructure.Data.ApplicationDbContext context)
+        private readonly IPremiumRepository _premiumRepository;
+        private readonly IStudentRepository _studentRepository;
+
+        public EditModel(IPremiumRepository premiumRepository, IStudentRepository studentRepository)
         {
-            _context = context;
+            _premiumRepository = premiumRepository;
+            _studentRepository = studentRepository;
         }
 
         [BindProperty]
@@ -25,13 +29,14 @@ namespace Domain.Pages_Premiums
                 return NotFound();
             }
 
-            var premium =  await _context.Premium.FirstOrDefaultAsync(m => m.Id == id);
+            var premium = await _premiumRepository.OnGetAsync(id);  //here is the usage of the repository to query the database
             if (premium == null)
             {
                 return NotFound();
             }
             Premium = premium;
-           ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
+            //ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
+            ViewData["StudentId"] = new SelectList(_studentRepository.OnGetAsync().Result, "Id", "Email");//here is the usage of the repository to query the database
             return Page();
         }
 
@@ -44,11 +49,13 @@ namespace Domain.Pages_Premiums
                 return Page();
             }
 
-            _context.Attach(Premium).State = EntityState.Modified;
+            //_context.Attach(Premium).State = EntityState.Modified;
+            _premiumRepository.Update(Premium);//here is the usage of the repository to query the database
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                await _premiumRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -67,7 +74,7 @@ namespace Domain.Pages_Premiums
 
         private bool PremiumExists(int id)
         {
-            return _context.Premium.Any(e => e.Id == id);
+            return _premiumRepository.PremiumExists(id);//here is the usage of the repository to query the database
         }
     }
 }

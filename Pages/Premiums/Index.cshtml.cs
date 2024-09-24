@@ -18,7 +18,7 @@ namespace Domain.Pages_Premiums
 
         public async Task OnGetAsync()
         {
-            Premium = await _premiumRepository.OnGetAsync();
+            Premium = await _premiumRepository.OnGetAsync(); //here is the usage of the repository to query the database
         }
     }
 }

@@ -2,16 +2,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Domain.Models;
+using Domain.Interfaces;
 
 namespace Domain.Pages_Premiums
 {
     public class DeleteModel : PageModel
     {
-        private readonly Infrastructure.Data.ApplicationDbContext _context;
+        private readonly IPremiumRepository _premiumRepository;
 
-        public DeleteModel(Infrastructure.Data.ApplicationDbContext context)
+        public DeleteModel(IPremiumRepository premiumRepository)
         {
-            _context = context;
+            _premiumRepository = premiumRepository;
         }
 
         [BindProperty]
@@ -24,7 +25,7 @@ namespace Domain.Pages_Premiums
                 return NotFound();
             }
 
-            var premium = await _context.Premium.FirstOrDefaultAsync(m => m.Id == id);
+            var premium = await _premiumRepository.OnGetAsync(id);  //here is the usage of the repository to query the database
 
             if (premium == null)
             {
@@ -44,12 +45,13 @@ namespace Domain.Pages_Premiums
                 return NotFound();
             }
 
-            var premium = await _context.Premium.FindAsync(id);
+            //var premium = await _context.Premium.FindAsync(id);
+            var premium = await _premiumRepository.OnGetAsync(id);  //here is the usage of the repository to query the database
+
             if (premium != null)
             {
                 Premium = premium;
-                _context.Premium.Remove(Premium);
-                await _context.SaveChangesAsync();
+                await _premiumRepository.DeleteAsync(premium); //here is the usage of the repository to query the database
             }
 
             return RedirectToPage("./Index");
