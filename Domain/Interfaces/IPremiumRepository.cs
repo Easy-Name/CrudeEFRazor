@@ -17,10 +17,11 @@ namespace Domain.Interfaces
 
         Task CreateAsync(Premium premium);
 
+        Task SaveChangesAsync();
 
+        bool PremiumExists(int id);
 
-
-
+        void Update(Premium premium);
     }
 }
 

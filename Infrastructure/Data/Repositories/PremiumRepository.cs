@@ -40,5 +40,25 @@ namespace Infrastructure.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteAsynQ(Premium premium)
+        {
+            _context.Premium.Remove(premium);
+            await _context.SaveChangesAsync();
+        }
+
+        public bool PremiumExists(int id)
+        {
+            return _context.Premium.Any(e => e.Id == id);
+        }
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        public void Update(Premium premium)
+        {
+            _context.Attach(premium).State = EntityState.Modified;
+        }
+
     }
 }

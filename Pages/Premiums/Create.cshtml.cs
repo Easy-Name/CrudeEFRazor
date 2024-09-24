@@ -21,7 +21,7 @@ namespace Domain.Pages_Premiums
         public IActionResult OnGet()
         {
         //ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
-        ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
+        ViewData["StudentId"] = new SelectList(_studentRepository.OnGetAsync().Result, "Id", "Email"); //here is the usage of the repository to query the database
             return Page();
         }
 

@@ -11,13 +11,13 @@ namespace Domain.Pages_Premiums
     {
 
         private readonly IPremiumRepository _premiumRepository;
+        private readonly IStudentRepository _studentRepository;
 
-        public EditModel(IPremiumRepository premiumRepository)
+        public EditModel(IPremiumRepository premiumRepository, IStudentRepository studentRepository)
         {
             _premiumRepository = premiumRepository;
+            _studentRepository = studentRepository;
         }
-
-
 
         [BindProperty]
         public Premium Premium { get; set; } = default!;
@@ -35,7 +35,8 @@ namespace Domain.Pages_Premiums
                 return NotFound();
             }
             Premium = premium;
-           ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
+            //ViewData["StudentId"] = new SelectList(_context.Students, "Id", "Email");
+            ViewData["StudentId"] = new SelectList(_studentRepository.OnGetAsync().Result, "Id", "Email");//here is the usage of the repository to query the database
             return Page();
         }
 
@@ -48,11 +49,13 @@ namespace Domain.Pages_Premiums
                 return Page();
             }
 
-            _context.Attach(Premium).State = EntityState.Modified;
+            //_context.Attach(Premium).State = EntityState.Modified;
+            _premiumRepository.Update(Premium);//here is the usage of the repository to query the database
 
             try
             {
-                await _context.SaveChangesAsync();
+                //await _context.SaveChangesAsync();
+                await _premiumRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -71,7 +74,7 @@ namespace Domain.Pages_Premiums
 
         private bool PremiumExists(int id)
         {
-            return _context.Premium.Any(e => e.Id == id);
+            return _premiumRepository.PremiumExists(id);//here is the usage of the repository to query the database
         }
     }
 }
